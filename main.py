@@ -28,7 +28,6 @@ gameOn = True
 new_laser = True
 laser = []
 distance = 0
-high_score = 0
 restart_cmd = False
 
 #rocket stuff
