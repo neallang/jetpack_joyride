@@ -1,6 +1,18 @@
 import random
 import pygame
 
+
+"""
+TODO: 
+* create menu screen (youtube)
+* change pause screen - proportions, interface, colors - make it unique
+* replace character with sprite (hitbox stays same - not a big deal)
+* music? MUSIC!
+* clean up the while loop... maybe separate into functions?
+*refactor!! change variable names, group chunks of starter code, better functions -- COUPLING!
+
+"""
+
 # pygame setup
 pygame.init()
 width = 1280
@@ -68,9 +80,6 @@ def draw_screen(lines, lase):
     screen.blit(font.render(f'High Score: {int(high_score)} m', True, 'white',), (10,70))
 
     return lines, top, bottom, lase, lase_line
-
-
-#draw player with different animations
 def draw_player():
     player_hitbox = pygame.rect.Rect((120, player_y + 10), (25, 60))
     #pygame.draw.rect(screen, 'green',player_hitbox, 5) #hitbox
@@ -158,7 +167,6 @@ def draw_pause():
     surface.blit(font.render(f"total distance traveled: {int(lifetime)}", True, 'black'), (220, 310))
     screen.blit(surface, (0, 0))
     return restart_cmd, quit_cmd
-
 def modify_player_info():
     global high_score, lifetime
     if distance > high_score:
