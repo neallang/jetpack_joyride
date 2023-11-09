@@ -19,10 +19,12 @@ booster = False
 counter = 0
 y_velocity = 0
 gravity = 0.4 #play around with this
+new_bg = 0
 
 line_list = [0, width/4, 2*width/4, 3*width/4] #these represent the lines in the background
 game_speed = 2
 
+gameOn = True
 new_laser = True
 laser = []
 distance = 0
@@ -95,8 +97,6 @@ def draw_player():
     pygame.draw.ellipse(screen, 'purple', [120, player_y + 20, 30, 50]) #player
     pygame.draw.circle(screen, 'purple', (135, player_y + 15), 10) #head
     return player_hitbox
-
-
 def check_colliding(): #returns a list of two booleans, representing [ISTOUCHING_BOTTOM, ISTOUCHING_TOP]
     coll = [False, False]
     rstrt = False
@@ -106,8 +106,10 @@ def check_colliding(): #returns a list of two booleans, representing [ISTOUCHING
         coll[1] = True
     if laser_line.colliderect(player):
         rstrt = True
+    if rocket_active:
+        if rocket.colliderect(player):
+            rstrt = True
     return coll, rstrt
-
 def generate_laser():
     # 0 = horizontal laser
     #1 = vertical laser
@@ -122,8 +124,6 @@ def generate_laser():
         laser_y = random.randint(100, height - 400)
         new_lase = [[width + offset, laser_y], [width + offset, laser_y + laser_height]]  # look into this - must understand random boundaries
     return new_lase
-
-
 def draw_rocket(coords, mode):
     if mode == 0:
         rock = pygame.draw.rect(screen, 'dark red', [coords[0] - 60, coords[1] - 25, 50, 50], 0, 5)
@@ -139,8 +139,17 @@ def draw_rocket(coords, mode):
         if not pause:
             coords[0] -= 10 + game_speed #make rocket faster over time
     return coords, rock
+def draw_pause():
+    pygame.draw.rect(surface, (128, 128, 128, 150), [0,0, width, height]) #transparent mask
+    pygame.draw.rect(surface, 'dark grey', [200, 150, 600, 50], 0, 10)
+    surface.blit(font.render("game paused. press 'ESC' to resume", True, 'black'), (220, 160))
+    restart_cmd = pygame.draw.rect(surface, 'white', [200, 220, 280, 50], 0, 10)
+    surface.blit(font.render("restart", True, 'black'), (220, 230))
+    quit_cmd = pygame.draw.rect(surface, 'white', [520, 220, 280, 50], 0, 10)
+    surface.blit(font.render("quit", True, 'black'), (540, 230))
+    screen.blit(surface, (0, 0))
+    return restart_cmd, quit_cmd
 
-gameOn = True
 while gameOn:
     clock.tick(60) #this is fps; lower if needed
 
@@ -149,11 +158,13 @@ while gameOn:
     else:
         counter = 0
 
-
     if new_laser:
         laser = generate_laser()
         new_laser = False
     lines, top_platform, bottom_platform, laser, laser_line = draw_screen(line_list, laser)
+
+    if pause:
+        restart, quit_game = draw_pause()
 
     if not rocket_active and not pause:
         rocket_counter += 1
@@ -181,9 +192,19 @@ while gameOn:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not pause:             #if we're pressing the space bar, booster is on
                 booster = True
+            if event.key == pygame.K_ESCAPE:
+                if not pause:
+                    pause = True
+                else:
+                    pause = False
         if event.type == pygame.KEYUP:                                #if we're no longer pressing, booster is off
             if event.key == pygame.K_SPACE:
                 booster = False
+        if event.type == pygame.MOUSEBUTTONDOWN and pause:
+            if restart.collidepoint(event.pos):
+                restart_cmd = True
+            if quit_game.collidepoint(event.pos):
+                gameOn = False
 
     if not pause:
         distance += game_speed
@@ -204,7 +225,11 @@ while gameOn:
         game_speed = 11
 
     if laser[0][0] < 0 and laser[1][0] < 0: #if the laser is off the screen, we make a new one
-        new_laser= True
+        new_laser= True\
+
+    if distance - new_bg > 500:
+        new_bg = distance
+        bg_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)) #weird syntax to avoid our character being blocked
 
     if restart_cmd:
         distance = 0
@@ -213,6 +238,8 @@ while gameOn:
         y_velocity = 0
         restart_cmd = 0
         new_laser = True
+        rocket_active = False
+        rocket_counter = 0
     if distance > high_score:
         high_score = int(distance)
 
