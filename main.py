@@ -37,6 +37,14 @@ rocket_active = False
 rocket_delay = 0
 rocket_coords = []
 
+#load in player info from beginning
+file = open('player_info.txt', 'r')
+read = file.readlines()
+high_score = int(read[0])
+lifetime = int(read[1])
+file.close()
+
+
 #move lines to create illusion of motion, draw background images via transparency
 def draw_screen(lines, lase):
     screen.fill("black")
@@ -150,6 +158,16 @@ def draw_pause():
     screen.blit(surface, (0, 0))
     return restart_cmd, quit_cmd
 
+def modify_player_info():
+    global high_score, lifetime
+    if distance > high_score:
+        high_score = distance
+    lifetime += distance
+    file = open('player_info.txt', 'w')
+    file.write(str(int(high_score)) + '\n')
+    file.write(str(int(lifetime)))
+    file.close()
+
 while gameOn:
     clock.tick(60) #this is fps; lower if needed
 
@@ -188,6 +206,7 @@ while gameOn:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #this is when you click the red X to quit
+            modify_player_info()
             gameOn = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not pause:             #if we're pressing the space bar, booster is on
@@ -204,6 +223,7 @@ while gameOn:
             if restart.collidepoint(event.pos):
                 restart_cmd = True
             if quit_game.collidepoint(event.pos):
+                modify_player_info()
                 gameOn = False
 
     if not pause:
@@ -232,6 +252,7 @@ while gameOn:
         bg_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)) #weird syntax to avoid our character being blocked
 
     if restart_cmd:
+        modify_player_info()
         distance = 0
         pause = False
         player_y = initial_y
