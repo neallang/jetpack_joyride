@@ -73,7 +73,7 @@ def draw_screen(lines, lase):
 #draw player with different animations
 def draw_player():
     player_hitbox = pygame.rect.Rect((120, player_y + 10), (25, 60))
-    pygame.draw.rect(screen, 'green',player_hitbox, 5) #hitbox
+    #pygame.draw.rect(screen, 'green',player_hitbox, 5) #hitbox
 
     if player_y < initial_y or pause: #if we're on the ground we should be running
         if booster:
@@ -154,6 +154,8 @@ def draw_pause():
     surface.blit(font.render("restart", True, 'black'), (220, 230))
     quit_cmd = pygame.draw.rect(surface, 'white', [520, 220, 280, 50], 0, 10)
     surface.blit(font.render("quit", True, 'black'), (540, 230))
+    pygame.draw.rect(surface, 'dark grey', [200, 300, 600, 50], 0, 10)
+    surface.blit(font.render(f"total distance traveled: {int(lifetime)}", True, 'black'), (220, 310))
     screen.blit(surface, (0, 0))
     return restart_cmd, quit_cmd
 
