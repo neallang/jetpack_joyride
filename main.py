@@ -4,13 +4,12 @@ import pygame
 
 """
 TODO: 
-* create menu screen (youtube)
 * change pause screen - proportions, interface, colors - make it unique
 * replace character with sprite (hitbox stays same - not a big deal)
 * music? MUSIC!
 * clean up the while loop... maybe separate into functions?
 *refactor!! change variable names, group chunks of starter code, better functions -- COUPLING!
-
+* create menu screen (youtube)
 """
 
 # pygame setup
@@ -157,14 +156,20 @@ def draw_rocket(coords, mode):
     return coords, rock
 def draw_pause():
     pygame.draw.rect(surface, (128, 128, 128, 150), [0,0, width, height]) #transparent mask
-    pygame.draw.rect(surface, 'dark grey', [200, 150, 600, 50], 0, 10)
-    surface.blit(font.render("game paused. press 'ESC' to resume", True, 'black'), (220, 160))
-    restart_cmd = pygame.draw.rect(surface, 'white', [200, 220, 280, 50], 0, 10)
-    surface.blit(font.render("restart", True, 'black'), (220, 230))
-    quit_cmd = pygame.draw.rect(surface, 'white', [520, 220, 280, 50], 0, 10)
-    surface.blit(font.render("quit", True, 'black'), (540, 230))
-    pygame.draw.rect(surface, 'dark grey', [200, 300, 600, 50], 0, 10)
-    surface.blit(font.render(f"total distance traveled: {int(lifetime)}", True, 'black'), (220, 310))
+
+    pygame.draw.rect(surface, 'dark grey', [270, 260, 600, 50], 0, 10)
+    surface.blit(font.render("Game Paused: Press 'ESC' to Resume", True, 'black'), (275, 270))
+
+    restart_cmd = pygame.draw.rect(surface, 'dark grey', [270, 380, 280, 50], 0, 10)
+    surface.blit(font.render("RESTART", True, 'black'), (340, 390))
+
+    quit_cmd = pygame.draw.rect(surface, 'dark grey', [590, 380, 280, 50], 0, 10)
+    surface.blit(font.render("QUIT", True, 'black'), (685, 390))
+
+
+    pygame.draw.rect(surface, 'black', [270, 10, 600, 50], 0, 10)
+    surface.blit(font.render(f"Total Distance Traveled: {int(lifetime)} m", True, 'dark grey'), (325, 20))
+
     screen.blit(surface, (0, 0))
     return restart_cmd, quit_cmd
 def modify_player_info():
