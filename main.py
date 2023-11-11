@@ -4,7 +4,6 @@ import pygame
 
 """
 TODO: 
-* change pause screen - proportions, interface, colors - make it unique
 * replace character with sprite (hitbox stays same - not a big deal)
 * music? MUSIC!
 * clean up the while loop... maybe separate into functions?
@@ -18,7 +17,7 @@ width = 1280
 height = 720
 screen = pygame.display.set_mode((width, height))
 surface = pygame.Surface((width, height), pygame.SRCALPHA) #SRCALPHA - allows us to draw things onto surface w/ transparency
-pygame.display.set_caption("Welcome to Neal's Jetpack Joyride!")
+pygame.display.set_caption("Neal's Jetpack Joyride")
 clock = pygame.time.Clock()
 font = pygame.font.Font("freesansbold.ttf", 32) #be sure to find different fonts and sizes!
 bg_color = (128, 128, 128)
