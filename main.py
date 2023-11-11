@@ -82,7 +82,7 @@ def draw_player():
     player_hitbox = pygame.rect.Rect((120, player_y + 10), (25, 60))
     #pygame.draw.rect(screen, 'green',player_hitbox, 5) #hitbox
 
-    if player_y < initial_y or pause: #if we're on the ground we should be running
+    if player_y < initial_y or pause: #dont move legs cases
         if booster:
             pygame.draw.ellipse(screen, 'red', [100, player_y + 50, 20, 30])
             pygame.draw.ellipse(screen, 'orange', [106, player_y + 50, 14, 30])
@@ -90,7 +90,7 @@ def draw_player():
         pygame.draw.rect(screen, 'purple', [128, player_y + 60, 10, 20], 0, 3) #left leg
         pygame.draw.rect(screen, 'purple', [130, player_y + 60, 10, 20], 0, 3) #right leg
     else:
-        #running stuff
+        #if we're on the ground we should be running
         if counter <= 10:
             pygame.draw.line(screen, 'purple', (128, player_y + 60), (140, player_y + 80), 10)
             pygame.draw.line(screen, 'purple', (130, player_y + 60), (120, player_y + 80), 10)
